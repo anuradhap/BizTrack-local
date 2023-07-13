@@ -9,5 +9,4 @@ public class BizTrackApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(BizTrackApplication.class, args);
 	}
-
 }
