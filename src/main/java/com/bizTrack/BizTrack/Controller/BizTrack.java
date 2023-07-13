@@ -37,6 +37,7 @@ public class BizTrack {
         public ResponseEntity<Course> saveCourse(@Validated @RequestBody Course course) {
             Course savedCourse = customerService.saveCourse(course);
             return ResponseEntity.ok(savedCourse);
+
         }
 
         @GetMapping("/getCourses")
