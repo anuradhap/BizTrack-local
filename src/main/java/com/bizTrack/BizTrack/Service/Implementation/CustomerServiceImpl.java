@@ -1,21 +1,22 @@
 package com.bizTrack.BizTrack.Service.Implementation;
-
-import com.bizTrack.BizTrack.Exception.BizTrackExceptionHandler;
+import com.bizTrack.BizTrack.Exception.CourseNotFoundException;
 import com.bizTrack.BizTrack.Exception.UserNotFoundException;
+import com.bizTrack.BizTrack.Model.Course;
 import com.bizTrack.BizTrack.Model.Customer;
+import com.bizTrack.BizTrack.Repository.CourseRepository;
 import com.bizTrack.BizTrack.Repository.CustomerRepository;
 import com.bizTrack.BizTrack.Service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private CustomerRepository customerRepository;
+    @Autowired
+    private CourseRepository courseRepository;
 
     @Override
     public Customer saveCustomer(Customer customer){
@@ -38,9 +39,9 @@ public class CustomerServiceImpl implements CustomerService {
             if(Objects.nonNull(customer.getLastName()) && !"".equalsIgnoreCase(customer.getLastName())){
                 updatedCustomer.setLastName(customer.getLastName());
             }
-            if(Objects.nonNull(customer.getAddress()) && !"".equalsIgnoreCase(customer.getAddress())){
-                updatedCustomer.setAddress(customer.getAddress());
-            }
+           // if(Objects.nonNull(customer.getAddress()) && !"".equalsIgnoreCase(customer.getAddress())){
+             //   updatedCustomer.setAddress(customer.getAddress());
+            //}
             if(Objects.nonNull(customer.getEmailId()) && !"".equalsIgnoreCase(customer.getEmailId())){
                 updatedCustomer.setEmailId(customer.getEmailId());
             }
@@ -53,6 +54,37 @@ public class CustomerServiceImpl implements CustomerService {
             return customerRepository.save(updatedCustomer);
         } else {
             throw new UserNotFoundException("User not found with ID: " + customerId);
+        }
+    }
+
+    @Override
+    public Course saveCourse(Course course) {
+        return courseRepository.save(course);
+    }
+
+    @Override
+    public List<Course> getCourses() {
+        return (List<Course>) courseRepository.findAll();
+    }
+
+    @Override
+    public Course updateCourse(Course course, Long courseId) throws CourseNotFoundException {
+        Optional<Course> optionalCourse = courseRepository.findById(courseId);
+        if(optionalCourse.isPresent()) {
+            Course updatedCourse = optionalCourse.get();
+            if(Objects.nonNull(course.getName()) && !"".equalsIgnoreCase(course.getName())){
+                updatedCourse.setName(course.getName());
+            }
+            if (course.getCharges() != null) {
+                updatedCourse.setCharges(course.getCharges());
+            }
+
+            if (course.getDuration() != null || course.getDuration() != 0) {
+                updatedCourse.setDuration(course.getDuration());
+            }
+            return courseRepository.save(updatedCourse);
+        } else {
+            throw new CourseNotFoundException("Course not found with ID: " + courseId);
         }
     }
 }

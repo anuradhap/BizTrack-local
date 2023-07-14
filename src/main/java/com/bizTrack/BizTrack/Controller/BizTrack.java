@@ -1,5 +1,6 @@
 package com.bizTrack.BizTrack.Controller;
 
+import com.bizTrack.BizTrack.Model.Course;
 import com.bizTrack.BizTrack.Model.Customer;
 import com.bizTrack.BizTrack.Service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,25 @@ public class BizTrack {
         public ResponseEntity<Customer> updateCustomer(@Validated @RequestBody Customer customer, @PathVariable("id") Long customerId) {
             Customer updatedCustomer = customerService.updateCustomer(customer, customerId);
             return ResponseEntity.ok(updatedCustomer);
+        }
+
+        @PostMapping("/addCourse")
+        public ResponseEntity<Course> saveCourse(@Validated @RequestBody Course course) {
+            Course savedCourse = customerService.saveCourse(course);
+            return ResponseEntity.ok(savedCourse);
+
+        }
+
+        @GetMapping("/getCourses")
+        public ResponseEntity<List<Course>> getCourses() {
+            List<Course> courses = customerService.getCourses();
+            return ResponseEntity.ok(courses);
+        }
+
+        @PutMapping("/updateCourse/{id}")
+        public ResponseEntity<Course> updateCourse(@Validated @RequestBody Course course, @PathVariable("id") Long courseId) {
+            Course updatedCourse = customerService.updateCourse(course, courseId);
+            return ResponseEntity.ok(updatedCourse);
         }
 
 }
